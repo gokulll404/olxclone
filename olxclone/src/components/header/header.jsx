@@ -1,4 +1,4 @@
-import React from 'react';
+import { useContext } from 'react';
 
 import './Header.css';
 import OlxLogo from '../../assets/OlxLogo';
@@ -7,10 +7,14 @@ import SellButtonPlus from "../../assets/SellButtonPlus";
 import SellButton from "../../assets/SellButton";
 import Search from "../../assets/Search";
 import { Link, useNavigate } from 'react-router-dom';
+import { useUser } from "../../context/UserContext";
+
 
 function Header() {
 
   const navigate = useNavigate();
+  const { username } = useUser();
+
 
 
 
@@ -44,12 +48,16 @@ function Header() {
           <Arrow></Arrow>
         </div>
         <div className="loginPage">
-          <span>  <Link to="/login" style={{ textDecoration: "none" }}>Login</Link></span>
+          <span>
+            <Link to="/login" style={{ textDecoration: "none" }}>
+              Login {username}
+            </Link>
+          </span>
           <hr />
         </div>
 
         <div className="sellMenu" onClick={() => navigate("/create")}
-              style={{ cursor: "pointer" }}>
+          style={{ cursor: "pointer" }}>
           <SellButton></SellButton>
           <div className="sellMenuContent">
             <SellButtonPlus></SellButtonPlus>

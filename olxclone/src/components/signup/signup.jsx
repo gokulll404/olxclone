@@ -24,7 +24,7 @@ export default function Signup() {
 
 
     try {
-      // ✅ Create user in Firebase Authentication
+
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
@@ -41,7 +41,7 @@ export default function Signup() {
       console.log("Username:", userName);
       console.log("Phone:", phone);
 
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       console.error("Error during signup:", error.message);
       alert(error.message);
