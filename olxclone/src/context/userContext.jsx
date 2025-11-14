@@ -11,12 +11,12 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
-        // Fetch username from Firestore
+        
         const userRef = doc(db, "users", currentUser.uid);
         const userSnap = await getDoc(userRef);
 
         if (userSnap.exists()) {
-          setUsername(userSnap.data().username); // 👈 Save username
+          setUsername(userSnap.data().username); 
         } else {
           setUsername(null);
         }
