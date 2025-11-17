@@ -1,44 +1,39 @@
-import React, { Fragment, useState } from "react";
-import "./Create.css";
-import Header from "../header/header";
-import { db, storage } from "../../firebase/firebaseConfig";
+import { useContext, Fragment, useState } from "react";
+import { PostsContext } from "../../store/postcontext";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import Header from "../header/header";
+import { db } from "../../firebase/firebaseConfig";
+
 
 function Create() {
+  const { setPosts } = useContext(PostsContext);
+
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
+  const [sellerName, setSellerName] = useState("");
+  const [phone, setPhone] = useState("");
+
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const newPost = { title, category, price, imageUrl, createdAt: serverTimestamp(), sellerName, phone,image };
+    const docRef = await addDoc(collection(db, "posts"), newPost);
 
-    if (!title || !category || !price) {
-      alert("Please fill in all fields");
-      return;
-    }
+    
 
-    try {
-      await addDoc(collection(db, "posts"), {
-        title,
-        category,
-        price,
-        createdAt: serverTimestamp(),
-      });
-
-      alert("✅ Data added successfully!");
-      setTitle("");
-      setCategory("");
-      setPrice("");
-      setImage(null);
-      setImagePreview(null);
-    } catch (error) {
-      console.error("❌ Error adding document:", error);
-    }
+    // Optionally attach id (Firestore returns it)
+    const postWithId = { ...newPost, id: docRef.id };
+    // Update context immediately for optimistic UI
+    setPosts(prev => [postWithId, ...prev]);
+    // (onSnapshot in provider will keep it in sync)
   };
 
- 
+
 
   return (
     <Fragment>
@@ -78,6 +73,30 @@ function Create() {
             name="Price"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
+          />
+          <br />
+
+          <label htmlFor="price">SellerName</label>
+          <br />
+          <input
+            className="input"
+            type="text"
+            id="seller"
+            name="Seller"
+            value={sellerName}
+            onChange={(e) => setSellerName(e.target.value)}
+          />
+          <br />
+
+          <label htmlFor="price">Phone</label>
+          <br />
+          <input
+            className="input"
+            type="text"
+            id="phone"
+            name="Phone"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
           />
           <br />
 

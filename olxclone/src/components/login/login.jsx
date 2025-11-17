@@ -1,21 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/firebaseConfig";
 import Logo from "../../assets/olx-logo.svg";
 import "./Login.css";
+import { AuthContext } from "../../store/firebasecontext";
+
 
 function Login() {
 
+  const { setUser } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
+    
     e.preventDefault();
-
+     setUser(email );
     try {
-      // ✅ Firebase login
+      
       await signInWithEmailAndPassword(auth, email, password);
       navigate("/"); 
     } catch (error) {
@@ -38,7 +42,7 @@ function Login() {
             name="email"
             defaultValue="John"
             value={email}
-            onChange={(e) => setEmail(e.target.value)} // ✅ Controlled input
+            onChange={(e) => setEmail(e.target.value)} 
             required
           />
           <br />
@@ -51,7 +55,7 @@ function Login() {
             name="password"
             defaultValue="Doe"
             value={password}
-            onChange={(e) => setPassword(e.target.value)} // ✅ Controlled input
+            onChange={(e) => setPassword(e.target.value)} 
             required
           />
           <br />

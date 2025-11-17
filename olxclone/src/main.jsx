@@ -1,13 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { UserProvider } from "./context/UserContext";
-import { BrowserRouter } from "react-router-dom"; // ✅ Import BrowserRouter
+
+import { BrowserRouter } from "react-router-dom";
+import { FirebaseContextProvider } from "./store/firebasecontext.jsx";
+import { PostsProvider } from "./store/postcontext.jsx"
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
-    <UserProvider>
-      <App />
-    </UserProvider>
+    <FirebaseContextProvider>
+      <PostsProvider>
+        <App />
+      </PostsProvider>
+    </FirebaseContextProvider>
   </BrowserRouter>
 );

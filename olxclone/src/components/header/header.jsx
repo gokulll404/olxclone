@@ -7,13 +7,29 @@ import SellButtonPlus from "../../assets/SellButtonPlus";
 import SellButton from "../../assets/SellButton";
 import Search from "../../assets/Search";
 import { Link, useNavigate } from 'react-router-dom';
-import { useUser } from "../../context/UserContext";
+import { AuthContext } from "../../store/firebasecontext";
+
+
+
 
 
 function Header() {
 
   const navigate = useNavigate();
-  const { username } = useUser();
+  const { user, logout, userData } = useContext(AuthContext);
+
+
+  const handleLogout = async () => {
+    try {
+      await logout();        // Firebase signOut()
+      navigate("/login");    // Redirect
+    } catch (error) {
+      console.log("Logout Error:", error);
+    }
+  };
+
+
+
 
 
 
@@ -47,14 +63,34 @@ function Header() {
           <span> ENGLISH </span>
           <Arrow></Arrow>
         </div>
+
+
         <div className="loginPage">
-          <span>
-            <Link to="/login" style={{ textDecoration: "none" }}>
-              Login {username}
+          {user ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <p> {userData?.userName}</p>
+
+              <button
+                onClick={handleLogout}
+                style={{
+                  background: "transparent",
+                  border: "1px solid black",
+                  padding: "5px 10px",
+                  cursor: "pointer",
+                  borderRadius: "5px"
+                }}
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <Link to="/signup" style={{ textDecoration: "none" }}>
+              <p>Please signUp</p>
             </Link>
-          </span>
+          )}
           <hr />
         </div>
+
 
         <div className="sellMenu" onClick={() => navigate("/create")}
           style={{ cursor: "pointer" }}>

@@ -1,67 +1,58 @@
-import React from 'react';
+import { useContext } from "react";
+import { PostsContext } from "../../store/postcontext";
+import Heart from "../../assets/Heart";
+import { useNavigate } from "react-router-dom";
+import '../posts/post.css'
 
-import Heart from '../../assets/Heart.jsx';
-import './Post.css';
-import { useNavigate } from 'react-router-dom';
-
-function Posts() {
+function Post() {
+  const { posts } = useContext(PostsContext);
   const navigate = useNavigate();
 
   return (
-    <div className="postParentDiv" 
-     onClick={() => navigate("/viewpost")}
-        style={{ cursor: "pointer" }}>
+    <div className="postParentDiv">
       <div className="moreView">
         <div className="heading">
           <span>Quick Menu</span>
           <span>View more</span>
         </div>
+
         <div className="cards">
-          <div
-            className="card"
-          >
-            <div className="favorite">
-              <Heart></Heart>
+          {posts.map((item) => (
+            <div
+              className="card"
+              key={item.id}
+              onClick={() => navigate("/viewpost", { state: item })}
+              style={{ cursor: "pointer" }}
+            >
+              <div className="favorite">
+                <Heart />
+              </div>
+
+              <div className="image">
+                <img src={item.imageUrl} alt={item.title} />
+              </div>
+
+              <div className="content">
+                <p className="rate">₹ {item.price}</p>
+                <span className="kilometer">{item.category}</span>
+                <p className="name">{item.title}</p>
+              </div>
+
+              <div className="date">
+                <span>
+                  {item.createdAt
+                    ? item.createdAt.toDate().toLocaleString()
+                    : "No date"}
+                </span>
+              </div>
             </div>
-            <div className="image">
-              <img src="../../../Images/R15V3.jpg" alt="" />
-            </div>
-            <div className="content">
-              <p className="rate">&#x20B9; 250000</p>
-              <span className="kilometer">Two Wheeler</span>
-              <p className="name"> YAMAHA R15V3</p>
-            </div>
-            <div className="date">
-              <span>Tue May 04 2021</span>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
-      <div className="recommendations">
-        <div className="heading">
-          <span>Fresh recommendations</span>
-        </div>
-        <div className="cards">
-          <div className="card">
-            <div className="favorite">
-              <Heart></Heart>
-            </div>
-            <div className="image">
-              <img src="../../../Images/R15V3.jpg" alt="" />
-            </div>
-            <div className="content">
-              <p className="rate">&#x20B9; 250000</p>
-              <span className="kilometer">Two Wheeler</span>
-              <p className="name"> YAMAHA R15V3</p>
-            </div>
-            <div className="date">
-              <span>10/5/2021</span>
-            </div>
-          </div>
-        </div>
-      </div>
+
+      
     </div>
   );
 }
 
-export default Posts;
+export default Post;
